@@ -7,11 +7,25 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { VitePWA } from "vite-plugin-pwa";
 
+// بناء الجوال (Capacitor): MOBILE=1 → مخرجات ثابتة في dist بدون خادم.
+const isMobileBuild = process.env["MOBILE"] === "1";
+
 export default defineConfig({
+  // في بناء الجوال نعطّل nitro/cloudflare لأن الناتج ملفات ثابتة فقط.
+  ...(isMobileBuild ? { nitro: false as const } : {}),
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
-    server: { entry: "server" },
+    ...(isMobileBuild ? {} : { server: { entry: "server" } }),
+    // وضع SPA: لا تصيير على الخادم — غلاف HTML واحد وكل شيء يُصيَّر في المتصفح.
+    ...(isMobileBuild
+      ? {
+          spa: {
+            enabled: true,
+            prerender: { crawlLinks: false, outputPath: "/index.html" },
+          },
+        }
+      : {}),
   },
   vite: {
     plugins: [
@@ -20,10 +34,11 @@ export default defineConfig({
         registerType: "autoUpdate",
         injectRegister: null,
         filename: "sw.js",
+        outDir: "dist/client",
         devOptions: { enabled: false },
         manifest: false,
         workbox: {
-          globDirectory: ".output/public",
+          globDirectory: "dist/client",
           globPatterns: ["**/*.{js,css,html,png,svg,ico,woff2,webmanifest}"],
           navigateFallback: "/",
           navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],

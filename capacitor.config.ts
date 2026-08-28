@@ -5,8 +5,8 @@ import type { CapacitorConfig } from "@capacitor/cli";
 const config: CapacitorConfig = {
   appId: "app.lovable.tibyan",
   appName: "تِبْيَان",
-  // مجلد الملفات الثابتة الناتج عن `npm run build`
-  webDir: ".output/public",
+  // مجلد الملفات الثابتة الناتج عن `npm run build:mobile` (SPA خالص)
+  webDir: "dist",
   android: {
     allowMixedContent: false,
   },
