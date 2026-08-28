@@ -18,10 +18,14 @@ export default defineConfig({
     // nitro/vite builds from this
     ...(isMobileBuild ? {} : { server: { entry: "server" } }),
     // وضع SPA: لا تصيير على الخادم — غلاف HTML واحد وكل شيء يُصيَّر في المتصفح.
-    spa: {
-      enabled: true,
-      prerender: { crawlLinks: false, outputPath: "/index.html" },
-    },
+    ...(isMobileBuild
+      ? {
+          spa: {
+            enabled: true,
+            prerender: { crawlLinks: false, outputPath: "/index.html" },
+          },
+        }
+      : {}),
   },
   vite: {
     plugins: [
@@ -33,7 +37,7 @@ export default defineConfig({
         devOptions: { enabled: false },
         manifest: false,
         workbox: {
-          globDirectory: ".output/public",
+          globDirectory: isMobileBuild ? "dist/client" : ".output/public",
           globPatterns: ["**/*.{js,css,html,png,svg,ico,woff2,webmanifest}"],
           navigateFallback: "/",
           navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
