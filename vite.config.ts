@@ -12,6 +12,11 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // وضع SPA: لا تصيير على الخادم — يُبنى غلاف HTML واحد ويُصيَّر كل شيء في المتصفح.
+    spa: {
+      enabled: true,
+      prerender: { crawlLinks: false, outputPath: "/index.html" },
+    },
   },
   vite: {
     plugins: [
