@@ -85,7 +85,7 @@ async function ensureChannel(native: NativeApi, sound?: string) {
       description: "تنبيهات دورية للصلاة على النبي ﷺ",
       importance: 5,
       visibility: 1,
-      sound: sound ?? undefined,
+      ...(sound ? { sound } : {}),
       vibration: true,
     });
   } catch {
