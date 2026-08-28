@@ -34,7 +34,6 @@ export default defineConfig({
         registerType: "autoUpdate",
         injectRegister: null,
         filename: "sw.js",
-        outDir: isMobileBuild ? "dist/client" : ".output/public",
         devOptions: { enabled: false },
         manifest: false,
         workbox: {
