@@ -39,8 +39,9 @@ export default defineConfig({
         manifest: false,
         workbox: {
           globDirectory: "dist/client",
-          globPatterns: ["**/*.{js,css,html,png,svg,ico,woff2,webmanifest}"],
-          navigateFallback: "/",
+          globPatterns: ["**/*.{js,css,html,png,jpg,svg,ico,woff,woff2,json,webmanifest,mp3,wav,ogg}"],
+          navigateFallback: "/index.html",
+          maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
           navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
           cleanupOutdatedCaches: true,
           runtimeCaching: [
